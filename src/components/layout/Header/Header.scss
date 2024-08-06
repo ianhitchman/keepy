@@ -1,0 +1,15 @@
+header.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  border-bottom: 1px solid var(--colour-borders);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+  > * {
+    padding: var(--padding);
+    flex-shrink: 1;
+  }
+}

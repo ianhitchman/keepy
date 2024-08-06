@@ -1,0 +1,21 @@
+.search-bar {
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  @media screen and (max-width: 1000px) {
+    display: none;
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: #fff;
+    > * {
+      width: 100% !important;
+    }
+  }
+}

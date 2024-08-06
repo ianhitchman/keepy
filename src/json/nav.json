@@ -1,0 +1,11 @@
+[
+  { "icon": "LightbulbOutlined", "text": "Notes", "page": "" },
+  {
+    "icon": "NotificationsNoneOutlined",
+    "text": "Reminders",
+    "page": "reminders"
+  },
+  { "icon": "LabelOutlined", "text": "Labels", "page": "labels" },
+  { "icon": "ArchiveOutlined", "text": "Archive", "page": "archive" },
+  { "icon": "DeleteOutlined", "text": "Bin", "page": "bin" }
+]
