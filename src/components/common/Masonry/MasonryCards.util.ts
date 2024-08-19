@@ -1,4 +1,4 @@
-import { CardData } from "../../../types/Card";
+import { Card } from "../../../types/Card";
 
 const fixedColumnWidth = 256;
 const mobileBreakpoint = 600;
@@ -60,7 +60,7 @@ const util = {
 
     return { columns, columnWidthPx, containerWidth };
   },
-  getDataAsRows: (data: CardData[] | null, numberOfColumns: number) => {
+  getDataAsRows: (data: Card[] | null, numberOfColumns: number) => {
     if (!data || Array.isArray(data) === false) return [];
     const rows = [];
     for (let i = 0; i < data.length; i += numberOfColumns) {
@@ -132,7 +132,7 @@ const util = {
       });
   },
 
-  getTallestColumn: (container: HTMLElement | null, rows: CardData[][]) => {
+  getTallestColumn: (container: HTMLElement | null, rows: Card[][]) => {
     const numberOfColumns = rows[0]?.length || 0;
     let tallestColumnHeight = 0;
     for (let i = 0; i < numberOfColumns; i++) {
@@ -148,7 +148,7 @@ const util = {
       }
     }
     return tallestColumnHeight || 0;
-  }
+  },
 };
 
 export default util;

@@ -1,8 +1,10 @@
 import { useRef, useEffect, useState } from "react";
+import MasonryCard from "./MasonryCard";
 import util from "./MasonryCards.util";
+import useStore from "../../../hooks/useStore";
 import useThrottledResize from "../../../hooks/useThrottledResize";
 import {
-  CardData,
+  Card,
   ColumnDimensions,
   CardTransforms,
   MasonryCardsProps,
@@ -10,10 +12,12 @@ import {
 import "./MasonryCards.scss";
 
 const MasonryCards: React.FC<MasonryCardsProps> = ({ data }) => {
+  const navIsOpen = useStore((state) => state.navIsOpen);
+  const navIsHoverOpen = useStore((state) => state.navIsHoverOpen);
   const container = useRef<HTMLDivElement | null>(null);
   const [columnsDimensions, setColumnsDimensions] =
     useState<ColumnDimensions | null>(null);
-  const [dataAsRows, setDataAsRows] = useState<CardData[][] | null>(null);
+  const [dataAsRows, setDataAsRows] = useState<Card[][] | null>(null);
   const dataAsRowsFlattened = JSON.stringify(dataAsRows);
   const topLeftCoordinates = { x: 0, y: 0 };
   const [cardTransforms, setCardTransforms] = useState<CardTransforms>({});
@@ -48,27 +52,27 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ data }) => {
     }, 500);
   };
 
-  const positionFirstRow = (row: CardData[]) => {
+  const positionFirstRow = (row: Card[]) => {
     if (!container.current || !dataAsRows || !columnsDimensions || !row) return;
-    row.forEach((card: CardData, columnNumber: number) => {
+    row.forEach((card: Card, columnNumber: number) => {
       transformTopRowCard(card, columnNumber);
     });
   };
 
-  const positionSubsequentRow = (row: CardData[], rowNumber: number) => {
+  const positionSubsequentRow = (row: Card[], rowNumber: number) => {
     if (!container.current || !dataAsRows || !columnsDimensions || !row) return;
 
     // sort previous row by height, and position this row accordingly
     const previousRow = [...dataAsRows[rowNumber - 1]];
     let previousRowElements =
-      previousRow.map((card: CardData) => {
+      previousRow.map((card: Card) => {
         return (
           container.current?.querySelector(`[data-id="${card.id}"]`) || null
         );
       }) || [];
     previousRowElements = util.sortElementsByHeight(previousRowElements);
 
-    row.forEach((card: CardData, columnNumber: number) => {
+    row.forEach((card: Card, columnNumber: number) => {
       const cardElement =
         container.current?.querySelector(`div[data-id="${card.id}"]`) || null;
       if (!cardElement) return;
@@ -97,7 +101,7 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ data }) => {
     setCardTransforms({ ...cardTransforms });
   };
 
-  const transformTopRowCard = (card: CardData, columnNumber: number) => {
+  const transformTopRowCard = (card: Card, columnNumber: number) => {
     const cardElement = document.querySelector(`[data-id="${card.id}"]`);
     if (!cardElement) return;
     const cardCoordinates = util.getPositionRelativeToDocument(cardElement);
@@ -152,8 +156,11 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ data }) => {
   };
 
   useEffect(resizeColumns, [container, data, dataAsRowsFlattened]);
+  useEffect(() => {
+    setTimeout(resizeColumns, 300);
+  }, [navIsOpen, navIsHoverOpen]);
   useEffect(init, [columnsDimensions]);
-  useThrottledResize(init, 1000);
+  useThrottledResize(init, 500);
   const containerStyles = {
     width: columnsDimensions
       ? columnsDimensions?.containerWidth + "px"
@@ -163,54 +170,13 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ data }) => {
 
   return (
     <div ref={container} className="masonry-container" style={containerStyles}>
-      {data?.map((card: CardData) => (
+      {data?.map((card: Card) => (
         <MasonryCard
           key={card.id}
           data={card}
           cardTransforms={cardTransforms}
         />
       ))}
-    </div>
-  );
-};
-
-const MasonryCard: React.FC<{
-  data: CardData;
-  cardTransforms: CardTransforms | null;
-}> = ({ data, cardTransforms }) => {
-  const getCardTransforms = (cardId: string) => {
-    if (!cardTransforms)
-      return {
-        x: 0,
-        y: 0,
-        width: 0,
-      };
-    return cardTransforms[cardId];
-  };
-
-  const x = getCardTransforms(data.id)?.x + "px";
-  const y = getCardTransforms(data.id)?.y + "px";
-  const transform = `translate3d(${x}, ${y}, 0)`;
-  const width =
-    getCardTransforms(data.id)?.width > 0
-      ? getCardTransforms(data.id)?.width + "px"
-      : "auto";
-
-  return (
-    <div
-      className="masonry-container__card"
-      data-id={data.id}
-      style={{
-        transform: transform,
-        width: width,
-      }}
-    >
-      <div className="masonry-container__card__content">
-        <h2>
-          {data.id} {data.title}
-        </h2>
-        <p>{data.content}</p>
-      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ nav.nav {
   gap: 0;
   padding: var(--padding) 0 var(--padding) 0;
   z-index: 1;
-  // position: fixed;
+  position: fixed;
   height: 100%;
 
   &[data-open="true"] {
@@ -13,7 +13,7 @@ nav.nav {
   }
   &[data-hover-open="true"][data-open="false"] {
     width: min(17.5rem, 50vw);
-    position: absolute;
+    // position: absolute;
     height: 100%;
     background: #fff;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);

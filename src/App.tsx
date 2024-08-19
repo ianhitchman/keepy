@@ -1,7 +1,11 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Main from "./components/layout/Main";
 import Header from "./components/layout/Header";
+import Main from "./components/layout/Main";
+
+// Create a client
+const queryClient = new QueryClient();
 
 const theme = createTheme({
   palette: {
@@ -16,10 +20,12 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Header />
-      <Main />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Header />
+        <Main />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

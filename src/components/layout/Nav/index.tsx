@@ -6,14 +6,14 @@ import useStore from "../../../hooks/useStore";
 
 import "./Nav.scss";
 
-// get y position of <main> element relative to the top of the page
-const getYPosition = () => {
-  const main = document.querySelector("main");
-  if (main) {
-    return main.getBoundingClientRect().top;
-  }
-  return 0;
-};
+// // get y position of <main> element relative to the top of the page
+// const getYPosition = () => {
+//   const main = document.querySelector("main");
+//   if (main) {
+//     return main.getBoundingClientRect().top;
+//   }
+//   return 0;
+// };
 
 // Define a type for icon names
 type IconName = keyof typeof icons;
@@ -38,8 +38,7 @@ const Nav = () => {
   const buttonPadding = isOpen ? "0 var(--padding) 0 var(--padding)" : "0";
   const buttonMargin = isOpen ? "0" : "0 0 0 var(--padding)";
   const buttonBorderRadius = isOpen ? "0" : "1.5rem";
-  const navYPosition = getYPosition();
-  const navHeight = `calc(100% - ${navYPosition}px)`; //navIsHoverOpen ? `calc(100% - ${navYPosition}px)` : "auto";
+  // const navYPosition = getYPosition();
 
   const handleMouseEnter = () => {
     if (hoverTimeout.current) {
@@ -71,7 +70,6 @@ const Nav = () => {
       data-hover-open={navIsHoverOpen}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ top: `${navYPosition}px`, height: navHeight }}
     >
       {navItems.map((item, index) => {
         const IconComponent = item.icon;

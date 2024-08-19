@@ -1,7 +1,10 @@
+.main-layout {
+  width: 100%;
+  position: relative;
+}
 main.main {
   grid-area: main;
   padding: 2rem;
-  height: 100%;
-  overflow: auto;
   z-index: 0;
+  transition: margin 0.1s ease-out;
 }
