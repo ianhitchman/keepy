@@ -1,0 +1,26 @@
+.modal {
+  width: 95%;
+  max-width: 50rem;
+  height: min(50vh, fit-content);
+  max-height: 90vh;
+  background-color: #fff;
+  animation: modal-scale-in-center 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: auto;
+  .modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}
+@keyframes modal-scale-in-center {
+  0% {
+    scale: 0;
+    opacity: 1;
+  }
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+}

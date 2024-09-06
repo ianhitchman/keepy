@@ -1,0 +1,30 @@
+.selection-actions {
+  background: var(--colour-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: selection-slide-in-top 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  padding: var(--padding) 1rem !important;
+  .selection-actions__close {
+    flex-shrink: 1;
+  }
+  .selection-actions__title {
+    flex-grow: 1;
+  }
+}
+@keyframes selection-slide-in-top {
+  0% {
+    transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
