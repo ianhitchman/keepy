@@ -13,10 +13,13 @@ export const useFetchTags = (options?: Record<string, any>) => {
 
   return useQuery({
     queryKey: ["tags"],
-    queryFn: () => request<TagsData>("tags", { sort: "-created" }),
+    queryFn: () => request<TagsData>("tags", { options: { sort: "-created" } }),
     refetchInterval: false,
     staleTime: 300000,
-    select: (data) => data?.result, // Ensure that your request function returns data with a `result` property
+    select: (data) => {
+      const result = data?.result;
+      return (Array.isArray(result)) ? result : result ? [result] : null;
+    },
     enabled: isMutating === 0,
   });
 };

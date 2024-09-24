@@ -1,8 +1,18 @@
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { SearchOutlined } from "@mui/icons-material";
+import useStore from "../../../hooks/useStore";
 import "./SearchBar.scss";
 
 const SearchBar = () => {
+  const searchText = useStore((state) => state.searchText);
+  const setSearchText = useStore((state) => state.setSearchText);
+
+  const handleUpdateSearchText = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchText(event.target.value);
+  };
+
   return (
     <div className="search-bar">
       <TextField
@@ -17,9 +27,9 @@ const SearchBar = () => {
               </IconButton>
             </InputAdornment>
           ),
-          onBlur: () => {
-            console.log("hide search");
-          },
+          // onBlur: () => {
+          //   console.log("hide search");
+          // },
         }}
         fullWidth
         sx={{
@@ -34,6 +44,8 @@ const SearchBar = () => {
             marginTop: "0 !important",
           },
         }}
+        value={searchText}
+        onChange={handleUpdateSearchText}
       />
     </div>
   );

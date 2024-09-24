@@ -2,7 +2,7 @@ import "./ImagesPreview.scss";
 
 const ImagesPreview: React.FC<{
   path: string;
-  images: string[] | null;
+  images?: string[] | null;
 }> = ({ images, path }) => {
   if (!images) return null;
   // do we have an odd or even number of images

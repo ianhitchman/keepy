@@ -22,7 +22,7 @@ const utils = {
       : { r: 0, g: 0, b: 0 };
   },
   // Get the contrasting color (black or white) based on the input color
-  getContrastingColor: (color: string | null) => {
+  getContrastingColor: (color?: string | null) => {
     if (!color) return 'black';
     // Expand shorthand hex notation
     color = utils.expandHex(color);
@@ -35,8 +35,9 @@ const utils = {
     return colorLuminance >= 0.5 ? "black" : "white";
   },
   // Return formatted date string with time
-  getFormattedDateTime: (date: string) => {
+  getFormattedDateTime: (date?: string) => {
     if (!date) return "-";
+    date = date.replace(/\s/g, "T");
     const dateObj = DateTime.fromISO(date);
     if (!dateObj.isValid) return "-";
 
@@ -89,11 +90,13 @@ const utils = {
   },
   // Truncate a string to a certain length, retaining whole words
   truncateString: (
-    str: string,
+    str?: string,
     maxLen = 50,
     brSplit = 0,
     retainLinebreaks = false
   ) => {
+    if (!str || typeof str !== "string") return "";
+
     // Remove any HTML tags
     const plainTextStr = utils.stripTags(str, retainLinebreaks);
 

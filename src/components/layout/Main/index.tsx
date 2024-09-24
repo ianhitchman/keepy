@@ -19,23 +19,23 @@ const defaultWidth = () => {
 };
 
 const Main = () => {
-  const navIsOpen = useStore((state) => state.navIsOpen);
-  const navIsHoverOpen = useStore((state) => state.navIsHoverOpen);
+  const isNavOpen = useStore((state) => state.isNavOpen);
+  const isNavHoverOpen = useStore((state) => state.isNavHoverOpen);
   const [navMarginOpen, setNavMarginOpen] = useState("280px");
   const [navMarginClosed, setNavMarginClosed] = useState(defaultWidth() + "px");
 
   useEffect(() => {
-    if (navIsOpen && !navIsHoverOpen)
+    if (isNavOpen && !isNavHoverOpen)
       setTimeout(() => {
         setNavMarginOpen(getNavWidth() + "px");
       }, 300);
-    if (!navIsOpen && !navIsHoverOpen)
+    if (!isNavOpen && !isNavHoverOpen)
       setTimeout(() => {
         setNavMarginClosed(getNavWidth() + "px");
       }, 300);
-  }, [navIsOpen, navIsHoverOpen]);
+  }, [isNavOpen, isNavHoverOpen]);
 
-  const navMargin = navIsOpen ? navMarginOpen : navMarginClosed;
+  const navMargin = isNavOpen ? navMarginOpen : navMarginClosed;
 
   return (
     <div className="main-layout">

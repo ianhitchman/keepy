@@ -5,7 +5,7 @@ import {
   LightbulbOutlined,
   ChecklistOutlined,
   ImageOutlined,
-  BrushOutlined,
+  // BrushOutlined,
 } from "@mui/icons-material";
 
 import "./CreateNew.scss";
@@ -20,7 +20,7 @@ const CreateNew = () => {
         <SpeedDialAction icon={<LightbulbOutlined />} tooltipTitle="Note" />
         <SpeedDialAction icon={<ChecklistOutlined />} tooltipTitle="List" />
         <SpeedDialAction icon={<ImageOutlined />} tooltipTitle="Image" />
-        <SpeedDialAction icon={<BrushOutlined />} tooltipTitle="Drawing" />
+        {/* <SpeedDialAction icon={<BrushOutlined />} tooltipTitle="Drawing" /> */}
       </SpeedDial>
     </div>
   );

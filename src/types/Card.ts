@@ -5,6 +5,9 @@ export interface CardData {
   content?: string;
   images?: string[];
   tags?: string[];
+  reminderDate?: string;
+  isArchived?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface Card {
@@ -14,6 +17,16 @@ export interface Card {
   content?: string;
   images?: string[];
   tags?: TagsData[];
+  reminderDate?: string;
+  isArchived?: boolean;
+  isDeleted?: boolean;
+}
+
+export interface ConfigData {
+  id: string | null;
+  taskPositions: Record<string, number>;
+  created: string | null;
+  updated: string | null;
 }
 
 export interface TagsData {
@@ -23,6 +36,7 @@ export interface TagsData {
 }
 export interface MasonryCardsProps {
   data: Card[];
+  onSave?: (type: string, data: Record<string, any>) => void;
 }
 
 export interface ColumnDimensions {
