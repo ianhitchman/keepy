@@ -8,6 +8,7 @@ import ImagesPreview from "../ImagesPreview";
 import { Chip, IconButton } from "@mui/material";
 import { CheckCircleOutline, CheckCircle } from "@mui/icons-material";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import colours from "../../../json/colours.json";
 
 const MasonryCard: React.FC<{
   data: Card;
@@ -29,6 +30,7 @@ const MasonryCard: React.FC<{
   const [transforms, setTransforms] = useState(transformsInit);
   const [preDraggingTransforms, setPreDraggingTransforms] =
     useState(transformsInit);
+  const [draggingEnabled, setDraggingEnabled] = useState(true);
 
   // Use dnd-kit hooks for draggable and droppable behavior
   const {
@@ -37,7 +39,7 @@ const MasonryCard: React.FC<{
     setNodeRef: dragRef,
     transform: dragTransforms,
     isDragging,
-  } = useDraggable({ id: data?.id });
+  } = useDraggable({ id: data?.id, disabled: !draggingEnabled });
   const { setNodeRef: dropRef } = useDroppable({ id: data?.id });
 
   // Handle updating transforms based on dragging state and initial transforms
@@ -94,6 +96,7 @@ const MasonryCard: React.FC<{
         isSelected={isSelected}
         isDragging={isDragging}
         cardStyles={cardStyles}
+        setDraggingEnabled={setDraggingEnabled}
         onToggle={onToggle}
         onUpdate={onUpdate}
       />
@@ -112,6 +115,7 @@ const MasonryCardComponent: React.FC<{
   selectable?: boolean;
   isSelected?: boolean;
   isDragging?: boolean;
+  setDraggingEnabled?: (enabled: boolean) => void;
   onToggle?: (id: string) => void;
   onUpdate?: (id: string, data: Record<string, any>) => void;
 }> = ({
@@ -125,6 +129,7 @@ const MasonryCardComponent: React.FC<{
   selectable = false,
   isSelected = false,
   isDragging = false,
+  setDraggingEnabled,
   onToggle,
   onUpdate,
 }) => {
@@ -148,10 +153,26 @@ const MasonryCardComponent: React.FC<{
     () => hasImages || !hasTags,
     [hasImages, hasTags]
   );
+  const colour = useMemo(() => {
+    if (!data?.colour) return undefined;
+    return colours.find((c) => c.name === data?.colour);
+  }, [data?.colour]);
+
+  const cardColourStyle = colour ? { backgroundColor: colour?.light } : {};
+  const cardActionsColourStyle = colour
+    ? { backgroundColor: colour?.lightOverlay }
+    : {};
 
   const handleToggle = useCallback(() => {
     onToggle?.(data?.id?.toString());
   }, [onToggle, data?.id]);
+
+  const handleSetDraggingEnabled = useCallback(
+    (enabled: boolean) => {
+      setDraggingEnabled?.(enabled);
+    },
+    [setDraggingEnabled]
+  );
 
   const memoizedStaticContent = useMemo(() => {
     return (
@@ -197,9 +218,14 @@ const MasonryCardComponent: React.FC<{
         )}
         <div
           className="masonry-container__card__content__actions"
+          style={cardActionsColourStyle}
           data-float={floatActions}
         >
-          <MasonryActions id={data?.id} onUpdate={onUpdate} />
+          <MasonryActions
+            id={data?.id}
+            setDraggingEnabled={handleSetDraggingEnabled}
+            onUpdate={onUpdate}
+          />
         </div>
       </>
     );
@@ -227,7 +253,11 @@ const MasonryCardComponent: React.FC<{
       {...dataAttributes}
       style={cardStyles}
     >
-      <div className="masonry-container__card__content" ref={dropRef}>
+      <div
+        className="masonry-container__card__content"
+        ref={dropRef}
+        style={cardColourStyle}
+      >
         {memoizedStaticContent}
       </div>
     </div>

@@ -66,6 +66,18 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({
     setDragStartTime(new Date().getTime());
   };
   const handleDragEnd = (event: DragEndEvent) => {
+    // const eventTarget = event?.activatorEvent?.target as HTMLElement;
+    // const eventTargetClass = eventTarget?.className;
+    // if (
+    //   eventTargetClass?.includes("MuiBackdrop") ||
+    //   eventTargetClass?.includes("MuiMenu")
+    // ) {
+    //   const trigger = document.querySelector(
+    //     ".MuiBackdrop-root"
+    //   ) as HTMLElement;
+    //   trigger.click();
+    //   return;
+    // }
     const itemId = event.active.id?.toString();
     const elapsedTime = new Date().getTime() - dragStartTime;
     if (elapsedTime < 300) {

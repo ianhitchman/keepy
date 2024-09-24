@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Coral",
+    "light": "#f7b0aa",
+    "lightOverlay": "#e0a29dee",
+    "dark": "#741c30"
+  },
+  {
+    "name": "Peach",
+    "light": "#ffbb9c",
+    "lightOverlay": "#efa07bee",
+    "dark": "#672c1c"
+  },
+  {
+    "name": "Sand",
+    "light": "#fef8bc",
+    "lightOverlay": "#ede8b4ee",
+    "dark": "#f7b0aa"
+  },
+  {
+    "name": "Mint",
+    "light": "#e2f5d5",
+    "lightOverlay": "#d5e3ccee",
+    "dark": "#294c3b"
+  },
+  {
+    "name": "Sage",
+    "light": "#b6dcd3",
+    "lightOverlay": "#abccc4ee",
+    "dark": "#a1b5b3"
+  },
+  {
+    "name": "Fog",
+    "light": "#d5e4ec",
+    "lightOverlay": "#c1cfd6ee",
+    "dark": "#2d6375"
+  },
+  {
+    "name": "Storm",
+    "light": "#b0ccdb",
+    "lightOverlay": "#a1bbc9ee",
+    "dark": "#2b4254"
+  },
+  {
+    "name": "Dusk",
+    "light": "#d3c0da",
+    "lightOverlay": "#c0afc7ee",
+    "dark": "#472f5a"
+  },
+  {
+    "name": "Blossom",
+    "light": "#f5e2de",
+    "lightOverlay": "#f0d9d2",
+    "dark": "#6a3a4f"
+  },
+  {
+    "name": "Clay",
+    "light": "#e8e3d5",
+    "lightOverlay": "#d6d2c7",
+    "dark": "#4a443b"
+  },
+  {
+    "name": "Chalk",
+    "light": "#efeff1",
+    "lightOverlay": "#d6d6d6",
+    "dark": "#232427"
+  }
+]

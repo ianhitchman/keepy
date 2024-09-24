@@ -54,6 +54,7 @@ const Home: React.FC = () => {
               reminderDate,
               isArchived,
               isDeleted,
+              colour,
             } = task;
             const tagsItems: TagsData[] = tags
               ?.map((tag: string) => {
@@ -78,6 +79,7 @@ const Home: React.FC = () => {
               reminderDate,
               isArchived,
               isDeleted,
+              colour,
             };
           })
           ?.filter((card) => card?.isArchived === isArchived)

@@ -8,6 +8,7 @@ export interface CardData {
   reminderDate?: string;
   isArchived?: boolean;
   isDeleted?: boolean;
+  colour?: string;
 }
 
 export interface Card {
@@ -20,6 +21,7 @@ export interface Card {
   reminderDate?: string;
   isArchived?: boolean;
   isDeleted?: boolean;
+  colour?: string;
 }
 
 export interface ConfigData {
