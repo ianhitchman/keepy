@@ -20,7 +20,7 @@ export const useFetchTasks = (options?: Record<string, any>) => {
 
   return useQuery({
     queryKey: ["tasks"],
-    queryFn: () => request<CardData>("tasks", { options: { sort: "-created" } }),
+    queryFn: () => request<CardData>("tasks", { options: options || { sort: "-created" } }),
     refetchInterval: 30000,
     refetchOnMount: true,
     refetchOnWindowFocus: "always",
@@ -40,19 +40,6 @@ export const useUpdateTask = () => {
     {
       mutationKey: ["tasks"],
       mutationFn: ({ id, body, options }: FetchOptions) => request<Record<string, any>>("tasks", { id, body, options, method: "PATCH" }),
-      onMutate: async (data) => {
-        // // Optimistic update
-        // const { result: currentData } = queryClient.getQueryData(["tasks"]) as { result: CardData[] };
-        // console.log(currentData);
-        // const currentCardIndex = currentData?.findIndex((task: CardData) => task.id === data.id);
-        // if (currentCardIndex && data.body) {
-        //   currentData[currentCardIndex] = {
-        //     ...currentData[currentCardIndex],
-        //     ...data.body,
-        //   };
-        // }
-        // queryClient.setQueryData(["tasks"], currentData);
-      },
       onSuccess: (response) => {
         console.log('response', response);
         // Optionally refetch or invalidate queries

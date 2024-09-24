@@ -22,7 +22,7 @@
     left: 0;
     .masonry-container__card__content {
       border-radius: 0.5rem;
-      background-color: #fff;
+      background-color: var(--colour-cards);
       border: 1px solid #e0e0e0;
       // max-height: 32rem;
       transition: box-shadow 0.2s ease-out;
@@ -63,7 +63,7 @@
         border-bottom-right-radius: 0.5rem;
       }
       .masonry-container__card__content__actions {
-        background: rgba(255, 255, 255, 0.9);
+        background: var(--colour-primary);
         border-bottom-left-radius: 0.5rem;
         border-bottom-right-radius: 0.5rem;
         display: flex;

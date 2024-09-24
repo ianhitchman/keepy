@@ -7,7 +7,7 @@ header.header {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fff;
+  background: var(--colour-primary);
   > * {
     padding: var(--padding);
     flex-shrink: 1;

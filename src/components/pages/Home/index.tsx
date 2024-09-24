@@ -40,6 +40,7 @@ const Home: React.FC = () => {
           colour,
         };
       });
+      console.log(tasks);
 
       const cardData: Card[] =
         (tasks || [])
@@ -61,7 +62,6 @@ const Home: React.FC = () => {
                 return tagData;
               })
               ?.filter(Boolean) as TagsData[];
-
             const positionData = config?.taskPositions as Record<
               string,
               number

@@ -1,6 +1,7 @@
 .main-layout {
   width: 100%;
   position: relative;
+  background-color: var(--colour-background);
 }
 main.main {
   grid-area: main;

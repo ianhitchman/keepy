@@ -9,6 +9,7 @@ interface MasonryCardOptions {
   columnWidth?: number;
   gap?: number;
   columns?: number;
+  autoArrange?: boolean;
 }
 
 interface MasonryCardsProps {
@@ -44,6 +45,7 @@ const useMasonry = ({ data: dataInit, container, options }: MasonryCardsProps) =
   const columns = options?.columns;
   let columnWidth = options?.columnWidth || 256;
   const columnGap = options?.gap || 0;
+  const autoArrange = options?.autoArrange === undefined ? false : options?.autoArrange;
 
   // get parent dimensions
   const parent = container.current?.parentNode as Element;
@@ -114,15 +116,18 @@ const useMasonry = ({ data: dataInit, container, options }: MasonryCardsProps) =
       columnHeights[x] = cardHeight;
     }
     else {
-      // Find the shortest column to place card underneath
-      const shortestCard = previousRowCards.reduce((prev, current) => {
-        return prev.height < current.height ? prev : current;
-      });
-      x = shortestCard.x;
-      y = shortestCard.y + shortestCard.height + columnGap;
+      let aboveCard = previousRowCards[0];
+      if (autoArrange) {
+        // Find the shortest column to place card underneath
+        aboveCard = previousRowCards.reduce((prev, current) => {
+          return prev.height < current.height ? prev : current;
+        });
+      }
+      x = aboveCard.x;
+      y = aboveCard.y + aboveCard.height + columnGap;
       columnHeights[x] = y + cardHeight;
       // remove the shortest card from previous row
-      previousRowCards = previousRowCards.filter((card: any) => card.id !== shortestCard.id);
+      previousRowCards = previousRowCards.filter((card: any) => card.id !== aboveCard.id);
 
     }
     const card = {
