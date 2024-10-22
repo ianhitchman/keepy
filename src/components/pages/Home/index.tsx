@@ -9,11 +9,11 @@ import { useFetchConfig, useUpdateConfig } from "../../../hooks/useFetchConfig";
 import useStore from "../../../hooks/useStore";
 
 const Home: React.FC = () => {
-  const [data, setData] = useState<Card[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isArchived, setIsArchived] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [isReminders, setIsReminders] = useState(false);
+  const setTasksData = useStore((state) => state.setTasksData);
   const searchText = useStore((state) => state.searchText);
   const filterTags = useStore((state) => state.filterTags);
   const currentPage = useStore((state) => state.currentPage);
@@ -40,8 +40,7 @@ const Home: React.FC = () => {
           colour,
         };
       });
-      console.log(tasks);
-
+      console.log("tasks", tasks);
       const cardData: Card[] =
         (tasks || [])
           .map((task: CardData) => {
@@ -82,7 +81,9 @@ const Home: React.FC = () => {
               colour,
             };
           })
-          ?.filter((card) => card?.isArchived === isArchived)
+          ?.filter((card) =>
+            isDeleted ? true : card?.isArchived === isArchived
+          )
           ?.filter((card) => card?.isDeleted === isDeleted)
           ?.filter((card) => {
             if (!isReminders) return true;
@@ -101,7 +102,7 @@ const Home: React.FC = () => {
           })
           ?.sort((a, b) => a?.position - b?.position) || [];
 
-      setData(cardData);
+      setTasksData(cardData);
     };
     // pause the card transitions if filters or data changes, to prevent them moving about all over the place
     setIsTransitionsPaused(true);
@@ -136,10 +137,17 @@ const Home: React.FC = () => {
           });
         break;
       case "task":
-        if (data?.id) {
+        const saveData = { ...data };
+        if (saveData?.id) {
+          if (saveData?.tags) {
+            saveData.tags = saveData.tags.map((tag: TagsData | string) => {
+              if (typeof tag === "string") return tag;
+              return tag.id;
+            });
+          }
           saveTask({
-            id: data?.id,
-            body: data,
+            id: saveData?.id,
+            body: saveData,
           });
         }
     }
@@ -154,12 +162,11 @@ const Home: React.FC = () => {
     setIsDeleted(currentPage === "deleted");
     setIsReminders(currentPage === "reminders");
   }, [currentPage]);
-
   return (
     <>
       {isLoggedIn && (
         <>
-          <MasonryCards data={data} onSave={handleSave} />
+          <MasonryCards onSave={handleSave} />
           <CreateNew />
           {false && isLoggedIn && (
             <button onClick={() => handleLogin(false)}>Log out</button>

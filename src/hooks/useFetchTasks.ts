@@ -40,12 +40,12 @@ export const useUpdateTask = () => {
     {
       mutationKey: ["tasks"],
       mutationFn: ({ id, body, options }: FetchOptions) => request<Record<string, any>>("tasks", { id, body, options, method: "PATCH" }),
-      onSuccess: (response) => {
-        console.log('response', response);
+      onSuccess: (response: any) => {
         // Optionally refetch or invalidate queries
         queryClient.invalidateQueries({
           queryKey: ['tasks'],
         });
+
       },
       onError: (error) => {
         // Handle error

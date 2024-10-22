@@ -29,6 +29,12 @@ const ColourMenu = ({
     onClose();
   };
 
+  const handleSelectColour = (colour: string) => {
+    onColourChange && onColourChange(colour);
+    setColour(colour);
+    onClose();
+  };
+
   const allColours = [
     {
       name: "None",
@@ -65,6 +71,7 @@ const ColourMenu = ({
     >
       {allColours.map((c) => (
         <IconButton
+          key={c.name}
           title={c.name}
           sx={{
             backgroundColor: c?.light,
@@ -77,8 +84,7 @@ const ColourMenu = ({
             },
           }}
           onClick={() => {
-            onColourChange && onColourChange(c.value);
-            setColour(c.value);
+            handleSelectColour(c.value);
           }}
         >
           {c.name === "None" ? <FormatColorReset /> : null}

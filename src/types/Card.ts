@@ -37,7 +37,6 @@ export interface TagsData {
   colour?: string;
 }
 export interface MasonryCardsProps {
-  data: Card[];
   onSave?: (type: string, data: Record<string, any>) => void;
 }
 

@@ -19,16 +19,17 @@ import useStore from "../../../hooks/useStore";
 
 import "./MasonryCards.scss";
 
-const MasonryCards: React.FC<MasonryCardsProps> = ({
-  data: dataInit,
-  onSave,
-}) => {
-  const [data, setData] = useState<Card[]>(dataInit);
-  const [mutatedData, setMutatedData] = useState<Card[]>(dataInit);
+const MasonryCards: React.FC<MasonryCardsProps> = ({ onSave }) => {
+  const tasksData = useStore((state) => state.tasksData);
+  const [data, setData] = useState<Card[]>(tasksData);
+  const [mutatedData, setMutatedData] = useState<Card[]>(tasksData);
   useEffect(() => {
-    setData(dataInit);
-    setMutatedData(dataInit);
-  }, [dataInit]);
+    setData(tasksData);
+    setMutatedData(tasksData);
+  }, [tasksData]);
+  useEffect(() => {
+    setMutatedData(data);
+  }, [data]);
 
   const [mostRecentDraggedId, setMostRecentDraggedId] = useState<string | null>(
     null
@@ -119,24 +120,26 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({
   );
 
   const handleUpdate = useCallback(
-    (id: string, updateData: Record<string, any>) => {
-      console.log(id, updateData);
-      const currentData = [...data]; // If `data` is being updated in the parent component, make sure this reference is memoized.
-      let itemIndex = currentData.findIndex((card) => card?.id === id);
-      if (itemIndex < 0) return;
-      const item = { ...currentData[itemIndex], ...updateData };
-      currentData[itemIndex] = item;
+    (id: Array<string>, updateData: Record<string, any>) => {
+      const currentData = [...data];
+      id.forEach((id) => {
+        let itemIndex = currentData.findIndex((card) => card?.id === id);
+        if (itemIndex < 0) return;
+        const item = { ...currentData[itemIndex], ...updateData };
+        currentData[itemIndex] = item;
 
-      // hide archived cards
-      if (
-        (updateData.isArchived && currentPage !== "archive") ||
-        (!updateData.isArchived && currentPage === "archive")
-      ) {
-        currentData.splice(itemIndex, 1);
-      }
-
+        // hide archived / deleted cards
+        if (
+          (updateData.isArchived && currentPage !== "archive") ||
+          (!updateData.isArchived && currentPage === "archive") ||
+          (updateData.isDeleted && currentPage !== "deleted") ||
+          (!updateData.isDeleted && currentPage === "deleted")
+        ) {
+          currentData.splice(itemIndex, 1);
+        }
+        onSave?.("task", item);
+      });
       setMutatedData([...currentData]);
-      onSave?.("task", item);
     },
     [data, currentPage]
   );

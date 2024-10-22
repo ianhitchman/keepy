@@ -23,7 +23,7 @@
     .masonry-container__card__content {
       border-radius: 0.5rem;
       background-color: var(--colour-cards);
-      border: 1px solid #e0e0e0;
+      border: 1px solid var(--colour-borders);
       // max-height: 32rem;
       transition:
         box-shadow 0.2s ease-out,
@@ -72,6 +72,10 @@
         justify-content: center;
         opacity: 0;
         transition: opacity 0.2s ease-out;
+        &[data-is-hidden="true"] {
+          visibility: hidden;
+          opacity: 0;
+        }
         &[data-float="true"] {
           position: absolute;
           bottom: 0;

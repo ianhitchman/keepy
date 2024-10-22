@@ -8,21 +8,22 @@ import ImagesPreview from "../ImagesPreview";
 import { Chip, IconButton } from "@mui/material";
 import { CheckCircleOutline, CheckCircle } from "@mui/icons-material";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import useStore from "../../../hooks/useStore";
 import colours from "../../../json/colours.json";
 
 const MasonryCard: React.FC<{
   data: Card;
   transforms: { x: number; y: number; width: number | string };
-  isCurrentTarget: boolean;
   mostRecentDraggedCardId: string | null;
+  isCurrentTarget: boolean;
   isSelected?: boolean;
   onToggle?: (id: string) => void;
-  onUpdate?: (id: string, data: Record<string, any>) => void;
+  onUpdate?: (id: Array<string>, data: Record<string, any>) => void;
 }> = ({
   data,
   transforms: transformsInit,
-  isCurrentTarget,
   mostRecentDraggedCardId,
+  isCurrentTarget,
   isSelected = false,
   onToggle,
   onUpdate,
@@ -117,7 +118,7 @@ const MasonryCardComponent: React.FC<{
   isDragging?: boolean;
   setDraggingEnabled?: (enabled: boolean) => void;
   onToggle?: (id: string) => void;
-  onUpdate?: (id: string, data: Record<string, any>) => void;
+  onUpdate?: (id: Array<string>, data: Record<string, any>) => void;
 }> = ({
   dragRef,
   dropRef,
@@ -133,7 +134,7 @@ const MasonryCardComponent: React.FC<{
   onToggle,
   onUpdate,
 }) => {
-  if (!data) return null;
+  const selectedOptionIds = useStore((state) => state.selectedOptionIds);
 
   // Memoize everything to optimise drag and drop smoothness
   const imagePath = useMemo(
@@ -175,6 +176,7 @@ const MasonryCardComponent: React.FC<{
   );
 
   const memoizedStaticContent = useMemo(() => {
+    const isMultiSelected = selectedOptionIds?.size > 0;
     return (
       <>
         {selectable && (
@@ -220,6 +222,7 @@ const MasonryCardComponent: React.FC<{
           className="masonry-container__card__content__actions"
           style={cardActionsColourStyle}
           data-float={floatActions}
+          data-is-hidden={isMultiSelected}
         >
           <MasonryActions
             id={data?.id}
@@ -239,9 +242,11 @@ const MasonryCardComponent: React.FC<{
     hasImages,
     imagePath,
     floatActions,
+    selectedOptionIds,
     onUpdate,
   ]);
 
+  if (!data) return null;
   return (
     <div
       className="masonry-container__card"

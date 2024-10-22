@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { Card } from "../types/Card";
 
 interface appState {
   currentPage: string;
@@ -21,6 +22,8 @@ interface appState {
   setFilterTags: (filterTags: string[]) => void;
   isTransitionsPaused: boolean;
   setIsTransitionsPaused: (isTransitionsPaused: boolean) => void;
+  tasksData: Card[];
+  setTasksData: (tasks: Card[]) => void;
 }
 
 const useStore = create<appState>((set) => ({
@@ -44,6 +47,8 @@ const useStore = create<appState>((set) => ({
   setFilterTags: (filterTags) => set({ filterTags }),
   isTransitionsPaused: true,
   setIsTransitionsPaused: (isTransitionsPaused) => set({ isTransitionsPaused }),
+  tasksData: [],
+  setTasksData: (tasksData) => set({ tasksData }),
 }));
 
 export default useStore;
