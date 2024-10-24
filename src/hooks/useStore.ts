@@ -24,6 +24,10 @@ interface appState {
   setIsTransitionsPaused: (isTransitionsPaused: boolean) => void;
   tasksData: Card[];
   setTasksData: (tasks: Card[]) => void;
+  editModalId: string | null;
+  setEditModalId: (editModalId: string | null) => void;
+  modalData: Card | null;
+  setModalData: (modalData: Card | null) => void;
 }
 
 const useStore = create<appState>((set) => ({
@@ -49,6 +53,10 @@ const useStore = create<appState>((set) => ({
   setIsTransitionsPaused: (isTransitionsPaused) => set({ isTransitionsPaused }),
   tasksData: [],
   setTasksData: (tasksData) => set({ tasksData }),
+  editModalId: null,
+  setEditModalId: (editModalId: string | null) => set({ editModalId }),
+  modalData: null,
+  setModalData: (modalData: Card | null) => set({ modalData }),
 }));
 
 export default useStore;

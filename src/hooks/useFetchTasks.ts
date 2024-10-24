@@ -6,6 +6,7 @@ import {
   useIsMutating,
 } from "@tanstack/react-query";
 import request from "../fetch";
+import { toast } from "mui-sonner";
 import { CardData } from "../types/Card";
 
 interface FetchOptions {
@@ -40,7 +41,7 @@ export const useUpdateTask = () => {
     {
       mutationKey: ["tasks"],
       mutationFn: ({ id, body, options }: FetchOptions) => request<Record<string, any>>("tasks", { id, body, options, method: "PATCH" }),
-      onSuccess: (response: any) => {
+      onSuccess: () => {
         // Optionally refetch or invalidate queries
         queryClient.invalidateQueries({
           queryKey: ['tasks'],
@@ -49,8 +50,40 @@ export const useUpdateTask = () => {
       },
       onError: (error) => {
         // Handle error
-        console.error("Update order failed", error);
+        console.error("Update failed", error);
+        toast.error("Error saving changes");
       }
     }
   );
 };
+
+export const useCreateTask = (callback?: (data?: any) => void, errorCallback?: (data?: any) => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<unknown, Error, FetchOptions>(
+    {
+      mutationKey: ["tasks"],
+      mutationFn: ({ body, options }: FetchOptions) => {
+        return request<Record<string, any>>("tasks", { body, options, method: "POST" })
+      },
+      onSuccess: (returnedData: any) => {
+        // Optionally refetch or invalidate queries
+        queryClient.invalidateQueries({
+          queryKey: ['tasks'],
+        });
+        // if we have a callback function, pass returned data to it
+        if (callback) {
+          callback(returnedData);
+        }
+      },
+      onError: (error) => {
+        // Handle error
+        console.error("Create failed", error);
+        toast.error("Error saving changes");
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      }
+    }
+  );
+}

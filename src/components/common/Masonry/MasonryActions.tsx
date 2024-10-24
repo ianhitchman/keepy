@@ -158,7 +158,7 @@ const MasonryActions: React.FC<{
           }
         }}
       />
-      <TagsMenu
+      {/* <TagsMenu
         anchorEl={tagsButtonRef.current}
         open={tagsMenuOpen}
         tags={tags}
@@ -170,7 +170,7 @@ const MasonryActions: React.FC<{
             });
           }
         }}
-      />
+      /> */}
     </>
   );
 };

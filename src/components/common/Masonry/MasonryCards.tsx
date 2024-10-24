@@ -10,7 +10,6 @@ import {
 } from "@dnd-kit/core";
 import { SmartPointerSensor } from "./PointerSensor";
 import MasonryCard from "./MasonryCard";
-import CardEditModal from "../CardEditModal";
 import FilterTags from "../FilterTags";
 import { Card, MasonryCardsProps } from "../../../types/Card";
 import useMasonry from "./useMasonry";
@@ -38,7 +37,7 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ onSave }) => {
     null
   );
   const [dragStartTime, setDragStartTime] = useState(0);
-  const [editModalId, setEditModalId] = useState<string | null>(null);
+  const setEditModalId = useStore((state) => state.setEditModalId);
   const currentPage = useStore((state) => state.currentPage);
   const selectedOptionIds = useStore((state) => state.selectedOptionIds);
   const setSelectedOptionIds = useStore((state) => state.setSelectedOptionIds);
@@ -182,10 +181,6 @@ const MasonryCards: React.FC<MasonryCardsProps> = ({ onSave }) => {
             />
           ))}
         </div>
-        <CardEditModal
-          itemId={editModalId}
-          onClose={() => setEditModalId(null)}
-        />
       </DndContext>
     </>
   );

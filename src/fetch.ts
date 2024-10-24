@@ -41,12 +41,16 @@ const request = async <T>(collection: string, options?: FetchOptions, queryParam
     let result: T | T[] | undefined;
     let error;
 
-    if (options.method && !options.id) {
+    if (options.method && options.method !== "POST" && !options.id) {
       result = await Promise.resolve(undefined);
     }
     else switch (options.method) {
       case "PATCH":
         result = await pb.collection(collection).update(options.id as string, options.body);
+        break;
+      case "POST":
+        console.log('POST!');
+        result = await pb.collection(collection).create(options.body);
         break;
       default:
         result = await pb.collection(collection).getFullList(options.options) as unknown as T[];
