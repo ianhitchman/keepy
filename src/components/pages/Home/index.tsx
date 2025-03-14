@@ -5,6 +5,7 @@ import MasonryCards from "../../common/Masonry/MasonryCards";
 import CardEditModal from "../../common/CardEditModal";
 import { TagsData } from "../../../types/Card";
 import { useFetchTags } from "../../../hooks/useFetchTags";
+import { useFetchListItems } from "../../../hooks/useFetchListItems";
 import { useFetchTasks, useUpdateTask } from "../../../hooks/useFetchTasks";
 import { useFetchConfig, useUpdateConfig } from "../../../hooks/useFetchConfig";
 import useParseIncomingTasks from "../../../hooks/useParseIncomingTasks";
@@ -20,6 +21,7 @@ const Home: React.FC = () => {
   const pb = new PocketBase(`${apiUrl}/`);
 
   const { data: tags } = useFetchTags();
+  const { data: listItems } = useFetchListItems();
   const { data: tasks } = useFetchTasks();
   const { data: config } = useFetchConfig();
 
@@ -28,6 +30,7 @@ const Home: React.FC = () => {
 
   useParseIncomingTasks(tasks, [
     tags,
+    listItems,
     tasks,
     config,
     searchText,

@@ -9,20 +9,31 @@ import {
   Unarchive,
   Delete,
   RestoreFromTrash,
+  Checklist,
 } from "@mui/icons-material";
 import { useFetchTasks } from "../../../hooks/useFetchTasks";
 import ColourMenu from "../ColourMenu";
-import TagsMenu from "../TagsMenu";
+// import TagsMenu from "../TagsMenu";
 import useStore from "../../../hooks/useStore";
-import { TagsData } from "../../../types/Card";
+// import { TagsData } from "../../../types/Card";
 
 const MasonryActions: React.FC<{
   id?: string;
   multi?: Boolean;
   invert?: Boolean;
+  list?: Boolean;
   setDraggingEnabled?: (enabled: boolean) => void;
   onUpdate?: (id: Array<string>, data: Record<string, any>) => void;
-}> = ({ id, multi = false, invert = false, setDraggingEnabled, onUpdate }) => {
+  onCreateList?: () => void;
+}> = ({
+  id,
+  multi = false,
+  invert = false,
+  list = false,
+  setDraggingEnabled,
+  onUpdate,
+  onCreateList,
+}) => {
   const colourButtonRef = useRef<HTMLButtonElement>(null);
   const tagsButtonRef = useRef<HTMLButtonElement>(null);
   const [colourMenuOpen, setColourMenuOpen] = useState(false);
@@ -38,6 +49,12 @@ const MasonryActions: React.FC<{
     }) || [];
   const taskIDs = tasks.map((task) => task.id);
   const task = id && tasks[0] ? tasks[0] : null;
+
+  const handleCreateList = () => {
+    if (onCreateList) {
+      onCreateList();
+    }
+  };
 
   const icons = [
     {
@@ -81,6 +98,16 @@ const MasonryActions: React.FC<{
       },
     },
   ];
+  // add 'new list' icon if enabled
+  if (list && !multi) {
+    const newItem = {
+      icon: <Checklist />,
+      name: "list",
+      label: "New List",
+      onClick: handleCreateList,
+    };
+    icons.splice(4, 0, newItem);
+  }
   // remove image icon if multiple cards selected
   if (multi) {
     icons.splice(0, 1);
@@ -117,7 +144,7 @@ const MasonryActions: React.FC<{
       }
     : {};
 
-  const tags = id && tasks[0] ? tasks[0].tags : undefined;
+  // const tags = id && tasks[0] ? tasks[0].tags : undefined;
   const colour = id && tasks[0] ? tasks[0].colour : undefined;
 
   return (

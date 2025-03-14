@@ -48,8 +48,10 @@ const request = async <T>(collection: string, options?: FetchOptions, queryParam
       case "PATCH":
         result = await pb.collection(collection).update(options.id as string, options.body);
         break;
+      case "DELETE":
+        await pb.collection(collection).delete(options.id as string);
+        break;
       case "POST":
-        console.log('POST!');
         result = await pb.collection(collection).create(options.body);
         break;
       default:

@@ -1,0 +1,43 @@
+.checklist {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  .checklist__item {
+    color: var(--colour-text);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    > .checklist__completed {
+      padding-top: 0.1rem;
+      display: inline-block;
+      flex-grow: 1;
+    }
+    &[data-is-completed="true"] {
+      text-decoration: line-through;
+    }
+    .checklist__text {
+      position: relative;
+      top: 0.55rem;
+    }
+    .checklist__add {
+      cursor: default;
+      background: transparent;
+      pointer-events: none;
+      &:hover {
+        cursor: default;
+        background: transparent;
+      }
+    }
+    .checklist__delete {
+      opacity: 0;
+      transition: opacity 0.2s ease-out;
+    }
+    &:hover {
+      background-color: var(--colour-secondary);
+      .checklist__delete {
+        opacity: 1;
+      }
+    }
+  }
+}

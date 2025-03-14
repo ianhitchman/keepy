@@ -5,6 +5,7 @@ export interface CardData {
   content?: string;
   images?: string[];
   tags?: string[];
+  listItems?: string[];
   reminderDate?: string;
   isArchived?: boolean;
   isDeleted?: boolean;
@@ -12,12 +13,14 @@ export interface CardData {
 }
 
 export interface Card {
-  id: string;
+  id?: string;
   position?: number;
   title?: string;
   content?: string;
   images?: string[];
   tags?: TagsData[];
+  listItems?: ListItem[];
+  showList?: boolean;
   reminderDate?: string;
   isArchived?: boolean;
   isDeleted?: boolean;
@@ -36,6 +39,19 @@ export interface TagsData {
   description?: string;
   colour?: string;
 }
+
+export interface ListItem {
+  id?: string;
+  task?: string;
+  position?: number;
+  label?: string;
+  isCompleted?: boolean;
+  completed?: Date | null;
+  created?: Date;
+  updated?: Date;
+}
+
+
 export interface MasonryCardsProps {
   onSave?: (type: string, data: Record<string, any>) => void;
 }
@@ -48,4 +64,11 @@ export interface ColumnDimensions {
 
 export interface CardTransforms {
   [key: string]: { x: number; y: number; width: number };
+}
+
+export interface FetchOptions {
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  id?: string;
+  body?: any;
+  options?: any;
 }

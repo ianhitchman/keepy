@@ -6,14 +6,7 @@ import {
   useIsMutating,
 } from "@tanstack/react-query";
 import request from "../fetch";
-import { ConfigData } from "../types/Card";
-
-interface FetchOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  id?: string;
-  body?: any;
-  options?: any;
-}
+import { ConfigData, FetchOptions } from "../types/Card";
 
 export const useFetchConfig = () => {
   const isMutating = useIsMutating({ mutationKey: ["config"] });

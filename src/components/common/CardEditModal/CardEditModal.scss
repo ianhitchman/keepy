@@ -5,7 +5,22 @@
   padding: 2rem;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  row-gap: 1rem;
+  position: relative;
+  // row-gap: 1rem;
+  &.card-edit--saving {
+    pointer-events: none;
+    filter: brightness(0.5);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(128, 128, 128, 0.5);
+      z-index: 100;
+    }
+  }
   > * {
     padding: var(--padding);
   }

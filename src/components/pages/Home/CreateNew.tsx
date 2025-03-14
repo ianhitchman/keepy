@@ -30,13 +30,16 @@ const CreateNew = () => {
   const { mutate: createTask } = useCreateTask(createCallback);
 
   const handleCreateTask = (type?: string) => {
-    const body = {
+    const body: Card = {
       title: "New Task",
     };
     createTask({
       body,
     });
-    const editBody: Card = { ...body, id: "pending" };
+    const editBody: Card = { ...body };
+    if (type === "list") {
+      editBody.showList = true;
+    }
     setModalData(editBody);
   };
 
@@ -48,7 +51,14 @@ const CreateNew = () => {
         onClick={() => handleCreateTask()}
       >
         <SpeedDialAction icon={<LightbulbOutlined />} tooltipTitle="Note" />
-        <SpeedDialAction icon={<ChecklistOutlined />} tooltipTitle="List" />
+        <SpeedDialAction
+          icon={<ChecklistOutlined />}
+          tooltipTitle="List"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCreateTask("list");
+          }}
+        />
         <SpeedDialAction icon={<ImageOutlined />} tooltipTitle="Image" />
         {/* <SpeedDialAction icon={<BrushOutlined />} tooltipTitle="Drawing" /> */}
       </SpeedDial>

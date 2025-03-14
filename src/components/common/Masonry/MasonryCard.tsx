@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, Fragment } from "react";
 import { DraggableAttributes, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Alarm } from "@mui/icons-material";
 import utils from "../../../utils";
@@ -149,6 +149,10 @@ const MasonryCardComponent: React.FC<{
     () => data?.tags && data.tags.length > 0,
     [data.tags]
   );
+  const hasList = useMemo(
+    () => data?.listItems && data.listItems.length > 0,
+    [data.listItems]
+  );
   const hasReminder = useMemo(() => !!data?.reminderDate, [data?.reminderDate]);
   const floatActions = useMemo(
     () => hasImages || !hasTags,
@@ -158,7 +162,6 @@ const MasonryCardComponent: React.FC<{
     if (!data?.colour) return undefined;
     return colours.find((c) => c.name === data?.colour);
   }, [data?.colour]);
-
   const cardColourStyle = colour ? { backgroundColor: colour?.light } : {};
   const cardActionsColourStyle = colour
     ? { backgroundColor: colour?.lightOverlay }
@@ -174,6 +177,50 @@ const MasonryCardComponent: React.FC<{
     },
     [setDraggingEnabled]
   );
+  let content = useMemo(() => {
+    const list = data?.listItems ? [...data.listItems] : [];
+    if (hasList) {
+      let className = "list-items-preview";
+      if (list.length > 10) {
+        className += " list-items-preview--overflow";
+      }
+
+      return (
+        <div className={className}>
+          {list?.splice(0, 10)?.map((listItem, index) => (
+            <div
+              className="list-items-preview__item"
+              data-is-completed={listItem?.isCompleted}
+              key={index}
+            >
+              <span>{listItem?.label}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    let content = utils.truncateString(data.content, 500, 0, true);
+
+    // Split by double newlines first to identify paragraphs
+    const paragraphs = content.split(/\r\n\r\n|\r\r|\n\n/);
+
+    // Map over each paragraph and split further by single newlines to add <br />
+    const contentWithBreaksAndParagraphs = paragraphs.map(
+      (paragraph, index) => (
+        <p key={index}>
+          {paragraph.split(/\r\n|\r|\n/).map((line, lineIndex) => (
+            <Fragment key={lineIndex}>
+              {line}
+              {lineIndex < paragraph.split(/\r\n|\r|\n/).length - 1 && <br />}
+            </Fragment>
+          ))}
+        </p>
+      )
+    );
+
+    return contentWithBreaksAndParagraphs;
+  }, [data.content, data.listItems]);
 
   const memoizedStaticContent = useMemo(() => {
     const isMultiSelected = selectedOptionIds?.size > 0;
@@ -188,9 +235,7 @@ const MasonryCardComponent: React.FC<{
           </IconButton>
         )}
         <h2>{data.title}</h2>
-        <div className="masonry-container__card__content__text">
-          {utils.truncateString(data.content, 500)}
-        </div>
+        <div className="masonry-container__card__content__text">{content}</div>
         {(hasTags || hasReminder) && (
           <div className="masonry-container__card__content__tags">
             {hasReminder && (

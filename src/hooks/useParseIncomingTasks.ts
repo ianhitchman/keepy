@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { TagsData, Card, CardData } from "../types/Card";
+import { TagsData, Card, CardData, ListItem } from "../types/Card";
 import { useFetchTags } from "../hooks/useFetchTags";
+import { useFetchListItems } from "../hooks/useFetchListItems";
 import { useFetchConfig } from "../hooks/useFetchConfig";
 import useStore from "../hooks/useStore";
 
 const useParseIncomingTasks = (tasks?: CardData[] | null, watch?: Array<any>, updateStore: boolean = true) => {
 
   const { data: tags } = useFetchTags();
+  const { data: listData } = useFetchListItems();
   const { data: config } = useFetchConfig();
   const [isArchived, setIsArchived] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
@@ -37,18 +39,31 @@ const useParseIncomingTasks = (tasks?: CardData[] | null, watch?: Array<any>, up
             content,
             images,
             tags,
+            listItems,
             reminderDate,
             isArchived,
             isDeleted,
             colour,
           } = task;
+
           const tagsItems: TagsData[] = tags
             ?.map((tag: string) => {
-              const tagData = tagsData.find((t) => t.id === tag);
-              if (!tagData) return null;
-              return tagData;
+              return tagsData.find((t) => t.id === tag) || null;
             })
             ?.filter(Boolean) as TagsData[];
+          const list: ListItem[] = listItems
+            ?.map((listItem: string) => {
+              let foundListItem = listData?.find((item) => item.id === listItem) || null;
+              if (foundListItem) foundListItem = {
+                id: foundListItem.id,
+                label: foundListItem.label,
+                position: foundListItem.position,
+                isCompleted: foundListItem.isCompleted,
+                completed: foundListItem.completed,
+              }
+              return foundListItem || null;
+            })
+            ?.filter(Boolean) as ListItem[];
           const positionData = config?.taskPositions as Record<
             string,
             number
@@ -62,6 +77,7 @@ const useParseIncomingTasks = (tasks?: CardData[] | null, watch?: Array<any>, up
             content,
             images,
             tags: tagsItems,
+            listItems: list,
             reminderDate,
             isArchived,
             isDeleted,
@@ -88,6 +104,7 @@ const useParseIncomingTasks = (tasks?: CardData[] | null, watch?: Array<any>, up
           return card?.tags?.some((tag) => filterTags.includes(tag?.id));
         })
         ?.sort((a, b) => a?.position - b?.position) || [];
+
     return cardData;
 
   };

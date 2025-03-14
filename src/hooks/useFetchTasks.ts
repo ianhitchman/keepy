@@ -7,14 +7,7 @@ import {
 } from "@tanstack/react-query";
 import request from "../fetch";
 import { toast } from "mui-sonner";
-import { CardData } from "../types/Card";
-
-interface FetchOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  id?: string;
-  body?: any;
-  options?: any;
-}
+import { CardData, FetchOptions } from "../types/Card";
 
 export const useFetchTasks = (options?: Record<string, any>) => {
   const isMutating = useIsMutating({ mutationKey: ["tasks"] });
