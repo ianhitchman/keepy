@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   IconButton,
   Menu,
@@ -8,8 +8,15 @@ import {
   TextField,
 } from "@mui/material";
 import { Label, MoreVert } from "@mui/icons-material";
-import { useFetchTags } from "../../../hooks/useFetchTags";
+import utils from "../../../utils";
+import {
+  useFetchTags,
+  useDeleteTag,
+  useUpdateTag,
+  useCreateTag,
+} from "../../../hooks/useFetchTags";
 import { TagsData } from "../../../types/Card";
+import ColourMenu from "../ColourMenu";
 
 interface TagsMenuProps {
   anchorEl: HTMLElement | null;
@@ -29,10 +36,27 @@ const TagsMenu = ({
   const [tags, setTags] = useState(initTags);
 
   const { data: allTags } = useFetchTags();
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const {
+    mutate: deleteTag,
+    isPending: isDeletingTag,
+    isError: isDeleteError,
+  } = useDeleteTag();
+  const {
+    mutate: updateTag,
+    isPending: isUpdatingTag,
+    isError: isUpdateError,
+  } = useUpdateTag();
+  const {
+    mutate: createTag,
+    isPending: isCreatingTag,
+    isError: isCreateError,
+  } = useCreateTag();
+  const [showMoreMenu, setShowMoreMenu] = useState<string | null>(null);
   const [showMoreAnchor, setShowMoreAnchor] = useState<HTMLElement | null>(
     null
   );
+  const [colourMenuTrigger, setColourMenuTrigger] =
+    useState<HTMLElement | null>(null);
 
   const tagsData: TagsData[] = (allTags || []).map((tag) => {
     const { id, description, colour } = tag;
@@ -53,6 +77,13 @@ const TagsMenu = ({
     onClose();
   };
 
+  const selectedTag =
+    tagsData && showMoreMenu
+      ? tagsData.find((tag) => {
+          return tag.id === showMoreMenu;
+        })
+      : null;
+
   const handleToggleTag = (tagId?: string) => {
     if (!tagId) return;
     const newTags = tags.includes(tagId)
@@ -65,11 +96,53 @@ const TagsMenu = ({
     setTags(newTags);
   };
 
+  const handleDeleteTag = () => {
+    const tagId = showMoreMenu;
+    if (!tagId) return;
+    deleteTag({ id: tagId });
+    setShowMoreMenu(null);
+  };
+
   const handleMoreMenu = (e: React.MouseEvent<HTMLElement>, tagId?: string) => {
     e.preventDefault();
     e.stopPropagation();
-    setShowMoreMenu(true);
+    setShowMoreMenu(tagId ?? null);
     setShowMoreAnchor(e.currentTarget);
+  };
+
+  const handleSelectColour = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const trigger = e.target as HTMLElement;
+    setColourMenuTrigger(trigger);
+  };
+
+  const handleCloseColour = () => {
+    setColourMenuTrigger(null);
+  };
+
+  const handleSetColour = (colour: string) => {
+    updateTag({
+      id: selectedTag?.id,
+      body: {
+        colour,
+      },
+    });
+    setColourMenuTrigger(null);
+    setShowMoreMenu(null);
+  };
+
+  const handleAddTag = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.code === "Enter") {
+      const target = e.target as HTMLInputElement;
+      const value = target?.value;
+      target.value = "";
+      createTag({
+        body: {
+          description: value,
+        },
+      });
+    }
   };
 
   return (
@@ -100,7 +173,7 @@ const TagsMenu = ({
             >
               <Label
                 sx={{
-                  color: tag.colour,
+                  color: utils.getColourFromName(tag.colour),
                 }}
               />
               <Checkbox checked={tags.includes(tag.id)} />
@@ -118,6 +191,7 @@ const TagsMenu = ({
         <TextField
           placeholder="Add tag"
           variant="standard"
+          onKeyDown={handleAddTag}
           sx={{
             margin: "0 0.5rem",
           }}
@@ -125,18 +199,31 @@ const TagsMenu = ({
       </Menu>
       <Menu
         anchorEl={showMoreAnchor}
-        open={showMoreMenu}
-        onClose={() => setShowMoreMenu(false)}
+        open={!!showMoreMenu}
+        onClose={() => setShowMoreMenu(null)}
         anchorOrigin={{
           vertical: "center",
           horizontal: "center",
         }}
       >
         <MenuList dense sx={{ padding: 0 }}>
-          <MenuItem>Set colour</MenuItem>
-          <MenuItem>Remove tag</MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              handleSelectColour(e);
+            }}
+          >
+            Set colour
+          </MenuItem>
+          <MenuItem onClick={handleDeleteTag}>Remove tag</MenuItem>
         </MenuList>
       </Menu>
+      <ColourMenu
+        anchorEl={colourMenuTrigger}
+        open={!!colourMenuTrigger}
+        colour={selectedTag?.colour}
+        onClose={handleCloseColour}
+        onColourChange={handleSetColour}
+      />
     </>
   );
 };

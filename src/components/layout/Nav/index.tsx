@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Button, Icon } from "@mui/material";
 import * as icons from "@mui/icons-material";
 import { Label } from "@mui/icons-material";
+import utils from "../../../utils";
 import navData from "../../../json/nav.json";
 import useStore from "../../../hooks/useStore";
 import { useFetchTags } from "../../../hooks/useFetchTags";
@@ -156,6 +157,7 @@ const Nav = () => {
         tags?.length > 0 &&
         tags?.map((tag) => {
           const buttonLabel = isOpen ? tag.description : null;
+          const tagColour = utils.getColourFromName(tag.colour, "light");
           return (
             <Button
               key={tag.id}
@@ -172,7 +174,7 @@ const Nav = () => {
                     width: "fit-content",
                     height: "fit-content",
                     display: "block",
-                    color: tag.colour,
+                    color: tagColour,
                     "& .MuiSvgIcon-root": {
                       display: "block",
                     },

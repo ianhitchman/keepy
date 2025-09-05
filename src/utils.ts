@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import colours from "./json/colours.json";
 
 const utils = {
   // Expand shorthand hex notation, e.g. "#fff" -> "#ffffff"
@@ -34,6 +35,15 @@ const utils = {
     // Return "black" if the luminance is greater than or equal to 0.5, else return "white"
     return colorLuminance >= 0.5 ? "black" : "white";
   },
+
+  getColourFromName: (colourName: string = "", darkLight: "dark" | "light" = "light") => {
+    const colour = colours.find((colour) => {
+      return colour.name.toLowerCase() === colourName.toLowerCase();
+    });
+    const colourHex = darkLight === "dark" ? colour?.dark : colour?.lightOverlay;
+    return colourHex ?? "#666";
+  },
+
   // Return formatted date string with time
   getFormattedDateTime: (date?: string) => {
     if (!date) return "-";

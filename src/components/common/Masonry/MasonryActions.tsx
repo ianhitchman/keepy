@@ -13,9 +13,9 @@ import {
 } from "@mui/icons-material";
 import { useFetchTasks } from "../../../hooks/useFetchTasks";
 import ColourMenu from "../ColourMenu";
-// import TagsMenu from "../TagsMenu";
+import TagsMenu from "../TagsMenu";
 import useStore from "../../../hooks/useStore";
-// import { TagsData } from "../../../types/Card";
+import { TagsData } from "../../../types/Card";
 
 const MasonryActions: React.FC<{
   id?: string;
@@ -144,7 +144,7 @@ const MasonryActions: React.FC<{
       }
     : {};
 
-  // const tags = id && tasks[0] ? tasks[0].tags : undefined;
+  const tags = id && tasks[0] ? tasks[0].tags : undefined;
   const colour = id && tasks[0] ? tasks[0].colour : undefined;
 
   return (
@@ -185,7 +185,7 @@ const MasonryActions: React.FC<{
           }
         }}
       />
-      {/* <TagsMenu
+      <TagsMenu
         anchorEl={tagsButtonRef.current}
         open={tagsMenuOpen}
         tags={tags}
@@ -197,7 +197,7 @@ const MasonryActions: React.FC<{
             });
           }
         }}
-      /> */}
+      />
     </>
   );
 };

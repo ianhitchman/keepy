@@ -20,6 +20,7 @@ const FilterTags = () => {
     <div className="filter-tags">
       {filterTags.map((tagId) => {
         const tag = tags?.find((t) => t.id === tagId);
+        const colour = utils.getColourFromName(tag?.colour);
         return (
           <Chip
             key={tag?.id}
@@ -29,15 +30,15 @@ const FilterTags = () => {
               handleRemoveTag(tagId);
             }}
             sx={{
-              backgroundColor: tag?.colour,
-              color: utils.getContrastingColor(tag?.colour || null),
+              backgroundColor: colour,
+              color: utils.getContrastingColor(colour || null),
               fontSize: "1rem",
               "& .MuiSvgIcon-root": {
-                color: utils.getContrastingColor(tag?.colour || null),
+                color: utils.getContrastingColor(colour || null),
                 opacity: "0.5",
               },
               "& .MuiSvgIcon-root:hover": {
-                color: utils.getContrastingColor(tag?.colour || null),
+                color: utils.getContrastingColor(colour || null),
                 opacity: "1",
               },
             }}

@@ -77,7 +77,7 @@ const MasonryCard: React.FC<{
   const dataAttributes = useMemo(
     () => ({
       "data-disable-transition": isDragging.toString(),
-      "data-id": data?.id.toString(),
+      "data-id": data?.id?.toString(),
       "data-is-current-card": isCurrentCard.toString(),
       "data-is-current-target": isCurrentTarget.toString(),
     }),
@@ -245,17 +245,20 @@ const MasonryCardComponent: React.FC<{
                 icon={<Alarm />}
               />
             )}
-            {data?.tags?.map((tag) => (
-              <Chip
-                key={tag.id}
-                label={tag.description}
-                size="small"
-                sx={{
-                  backgroundColor: tag.colour,
-                  color: utils.getContrastingColor(tag.colour),
-                }}
-              />
-            ))}
+            {data?.tags?.map((tag) => {
+              const colour = utils.getColourFromName(tag.colour);
+              return (
+                <Chip
+                  key={tag.id}
+                  label={tag.description}
+                  size="small"
+                  sx={{
+                    backgroundColor: colour,
+                    color: utils.getContrastingColor(colour),
+                  }}
+                />
+              );
+            })}
           </div>
         )}
         {hasImages && (
